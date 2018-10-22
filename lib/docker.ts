@@ -24,7 +24,7 @@ class Docker {
     }
   }
 
-  public async cp() {
+  public async cp(destinationPath: string) {
     let sha;
     try {
       sha = await subProcess.execute('docker', [
@@ -57,7 +57,7 @@ class Docker {
 
     try {
       await subProcess.execute('docker', [
-        'cp', `${sha.trim()}:${workingDir}`, '/tmp/foo',
+        'cp', `${sha.trim()}:${workingDir}`, destinationPath,
       ]);
     } catch (err) {
       console.error('docker cp failed');

@@ -3,7 +3,7 @@ import * as imageIdDetector from './image-id-detector';
 import * as apkAnalyzer from './apk-analyzer';
 import * as aptAnalyzer from './apt-analyzer';
 import * as rpmAnalyzer from './rpm-analyzer';
-import { analyze as workdirAnalyze } from './workdir-artifacts-analyzer';
+import { analyze as nodeAnalyze } from './node-analyzer';
 
 export {
   analyze,
@@ -17,7 +17,7 @@ function analyze(targetImage: string) {
       apkAnalyzer.analyze(targetImage),
       aptAnalyzer.analyze(targetImage),
       rpmAnalyzer.analyze(targetImage),
-      workdirAnalyze(targetImage),
+      nodeAnalyze(targetImage),
     ]),
   ])
   .then(res => ({
