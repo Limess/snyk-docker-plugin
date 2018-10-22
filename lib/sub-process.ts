@@ -24,6 +24,7 @@ export function execute(
     });
 
     proc.on('close', (code) => {
+      console.log(command, args,code);
       if (code !== 0) {
         return reject(stdout || stderr);
       }
