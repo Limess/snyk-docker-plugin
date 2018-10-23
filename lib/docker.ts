@@ -25,23 +25,6 @@ class Docker {
   }
 
   public async cp(destinationPath: string) {
-    let sha;
-    try {
-      sha = await subProcess.execute('docker', [
-        'run',
-        '-d',
-        this.targetImage,
-        '--rm',
-        '--entrypoint',
-        '""',
-        '--network',
-        'none',
-      ]);
-      console.log(sha)
-    } catch (err) {
-      console.error({ err }, 'docker run failed');
-    }
-
     let workingDir;
     try {
       const workingDirRaw = await subProcess.execute('docker', [
@@ -55,12 +38,23 @@ class Docker {
       console.error('docker inspect failed');
     }
 
+    let sha;
     try {
-      await subProcess.execute('docker', [
-        'cp', `${sha.trim()}:${workingDir}`, destinationPath,
+      sha = await subProcess.execute('docker', [
+        'run',
+        '--rm',
+        '-v',
+        destinationPath + ':/tmp',
+        this.targetImage,
+        '/bin/sh',
+        '-c',
+        `"cp -r ${workingDir} /tmp"`,
+        '--network',
+        'none',
       ]);
+      console.log(sha);
     } catch (err) {
-      console.error('docker cp failed');
+      console.error({ err }, 'docker run failed');
     }
   }
 }
